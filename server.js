@@ -79,8 +79,28 @@ app.get('/fruits/:fruitId', async (req, res) => {
 app.delete('/fruits/:fruitId', async (req, res) => {
     await Fruit.findByIdAndDelete(req.params.fruitId);
     res.redirect('/fruits');
-})
+});
 
+//Edit route used to send a page to the client with am edit form
+//pre-filled out with fruit details
+app.get('/fruits/:fruitId/edit', async (req, res) => {
+    //1.look up fruit by its id
+    const foundFruit = await Fruit.findById(req.params.fruitId);
+    //2. respond with edit template with edit form
+    res.render('fruits/edit.ejs', {fruit: foundFruit});
+});
+
+//Update Route- used to capture edit form submissions from the client
+//and send updates to mongoDB
+app.put('/fruits/:fruitId', async (req, res) => {
+    if (req.body.isReadyToEat === 'on') {
+        req.body.isReadyToEat = true;
+    } else {
+        req.body.isReadyToEat = false;
+    }
+    await Fruit.findByIdAndUpdate(req.params.fruitId, req.body);
+    res.redirect(`/fruits/${req.params.fruitId}`);
+});
 
 
 app.listen(3000, () => {
