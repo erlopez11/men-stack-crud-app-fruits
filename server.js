@@ -4,6 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 //Import Fruit Model
 const Fruit = require('./models/fruit');
+const methodOverride = require('method-override');
+const morgan = require('morgan');
 
 //initialize the Express Application
 const app = express();
@@ -25,6 +27,11 @@ mongoose.connection.on('error', (error) => {
 //body parser middleware: this function reads the request body
 //and decodes ut into req.body so we can acesss form data!
 app.use(express.urlencoded({extended: false}));
+//method override reads the '_method' query param for 
+//information about DELETE or PUT requests
+app.use(methodOverride('_method'));
+app.use(morgan('dev'));
+
 
 //Routes
 
@@ -66,6 +73,13 @@ app.get('/fruits/:fruitId', async (req, res) => {
     const foundFruit = await Fruit.findById(req.params.fruitId);
     res.render('fruits/show.ejs', {fruit: foundFruit});
 });
+
+//Delete route- once matched by server.js sends an
+//action to MongoDB to delete a document using it's id to find and delete it
+app.delete('/fruits/:fruitId', async (req, res) => {
+    await Fruit.findByIdAndDelete(req.params.fruitId);
+    res.redirect('/fruits');
+})
 
 
 
