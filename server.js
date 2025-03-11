@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Fruit = require('./models/fruit');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
+const authController = require('./controllers/auth');
 
 //initialize the Express Application
 const app = express();
@@ -27,10 +28,17 @@ mongoose.connection.on('error', (error) => {
 //body parser middleware: this function reads the request body
 //and decodes ut into req.body so we can acesss form data!
 app.use(express.urlencoded({extended: false}));
+
 //method override reads the '_method' query param for 
 //information about DELETE or PUT requests
 app.use(methodOverride('_method'));
 app.use(morgan('dev'));
+
+app.use('/auth', authController);
+
+//Static asset middleware
+//used to send static assests to the client(css, images, DOM manipulation JS)
+app.use(express.static('public'));
 
 
 //Routes
@@ -39,6 +47,8 @@ app.use(morgan('dev'));
 app.get('/', (req, res) => {
     res.render('index.ejs');
 });
+
+
 
 //Path to page with a fomr
 app.get('/fruits/new', (req, res) => {
