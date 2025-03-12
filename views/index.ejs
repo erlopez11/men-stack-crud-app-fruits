@@ -10,12 +10,21 @@
     <title>Fruits App</title>
   </head>
   <body>
-    <h1>Welcome to the Fruits app!</h1>
+    <% if (user) { %>
+      <h1>Welcome to the Fruits app <%= user.username %>!</h1>
+   <% } else { %>
+    <p>
+      <a href="/auth/sign-up">Sign Up</a> or <a href="/auth/sign-in">Sign In</a>
+    </p>
+   <% }%>
     <p>An app for collecting your favorite fruits.</p>
     <nav>
         <ul>
             <li>
                 <a href="/auth/sign-up">Sign Up</a>
+            </li>
+            <li>
+              <a href="/auth/sign-in">Sign In</a>
             </li>
             <li>
                 <a href="/fruits">Browse Fruits</a>
