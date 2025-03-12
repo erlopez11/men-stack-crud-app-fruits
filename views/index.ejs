@@ -12,10 +12,12 @@
   <body>
     <% if (user) { %>
       <h1>Welcome to the Fruits app <%= user.username %>!</h1>
+      <a href="/auth/sign-out">Sign Out</a>
    <% } else { %>
-    <p>
-      <a href="/auth/sign-up">Sign Up</a> or <a href="/auth/sign-in">Sign In</a>
-    </p>
+      <h1>Welcome to the Fruits app!</h1>
+      <p>
+        <a href="/auth/sign-up">Sign Up</a> or <a href="/auth/sign-in">Sign In</a>
+      </p>
    <% }%>
     <p>An app for collecting your favorite fruits.</p>
     <nav>
