@@ -7,6 +7,7 @@ const Fruit = require('./models/fruit');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
 const authController = require('./controllers/auth');
+const session = require('express-session');
 
 //initialize the Express Application
 const app = express();
@@ -34,6 +35,14 @@ app.use(express.urlencoded({extended: false}));
 app.use(methodOverride('_method'));
 app.use(morgan('dev'));
 
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+
 app.use('/auth', authController);
 
 //Static asset middleware
@@ -45,7 +54,9 @@ app.use(express.static('public'));
 
 //Root path/route (homepage)
 app.get('/', (req, res) => {
-    res.render('index.ejs');
+    res.status(200).render('index.ejs', {
+        user: req.session.user,
+    });
 });
 
 
